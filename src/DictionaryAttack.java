@@ -12,8 +12,8 @@ public class DictionaryAttack {
 	public static void main(String[] args) {		
 		
 		double startTime;
-    	double finishTime;
-    	double elapsedSeconds;
+    		double finishTime;
+    		double elapsedSeconds;
 		BufferedReader buffer = null;
 		List<String> hashvalue = new ArrayList<String>();
 	 	String curLine = null;

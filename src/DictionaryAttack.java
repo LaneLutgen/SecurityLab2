@@ -1,71 +1,70 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DictionaryAttack {
 
-	private static final String passOne = "6f047ccaa1ed3e8e05cde1c7ebc7d958";
-	private static final String passTwo = "275a5602cd91a468a0e10c226a03a39c";
-	private static final String passThree = "b4ba93170358df216e8648734ac2d539";
-	private static final String passFour = "dc1c6ca00763a1821c5af993e0b6f60a";
-	private static final String passFive = "8cd9f1b962128bd3d3ede2f5f101f4fc";
-	private static final String passSix = "554532464e066aba23aee72b95f18ba2";
-	
-	private static long startTime;
-	private static long finishTime;
-	
-	public static void main(String[] args) {
-		//Receive dictionary file via command line arg
-		String dictFilePath = null;
-		BufferedReader buffer;
+	public static void main(String[] args) {		
 		
-		if(args.length > 0)
-		{
-			dictFilePath = args[0];
-		}
+		double startTime;
+	    double finishTime;
+        double elapsedSeconds;
+        startTime = System.currentTimeMillis();
+		BufferedReader buffer = null;
+		List<String> hashvalue = new ArrayList<String>();
+	    String curLine = null;
 		
-		if(dictFilePath != null)
-		{
-			//If dictionary file was entered, attempt to parse it
-			try
-			{
-				buffer = new BufferedReader(new FileReader(dictFilePath));
-				
-				String curLine;
-				while ((curLine = buffer.readLine()) != null) 
-				{
-					//Apply MD5 algorithm and check if a password is found in the dictionary
+		try{
+			buffer = new BufferedReader(new FileReader("/input/hashvalue.txt"));
+			
+			while ((curLine = buffer.readLine()) != null) {
+				hashvalue.add(curLine);
+			}
+	   	
+			buffer = new BufferedReader(new FileReader("/input/"));		//need to add the dictionay filepath here
+		
+			while ((curLine = buffer.readLine()) != null) {
+				int i = hashvalue.indexOf(encryptHashValue(curLine));
+			
+				if(i != -1){
+					finishTime = System.currentTimeMillis();
+					elapsedSeconds = (finishTime - startTime)/1000;
+					System.out.println();	
+					System.out.print("The password for hash value " +hashvalue.get(i)+ " is " +curLine+ ",it takes the program " +elapsedSeconds+ " sec to recover this password");	
+					hashvalue.remove(i);
 				}
 			}
-			catch(IOException e)
-			{
-				System.err.println("Dictionary file was not found. Please enter the file path as a command line arg.");
-			}
-			
-		}
-		else
-		{
-			System.err.println("Dictionary file was not found. Please enter the file path as a command line arg.");
 		}
 		
-		// TODO Auto-generated method stub
-		String resolvedOne = resolvePassword(passOne);
-		String resolvedTwo = resolvePassword(passTwo);
-		String resolvedThree = resolvePassword(passThree);
-		String resolvedFour = resolvePassword(passFour);
-		String resolvedFive = resolvePassword(passFive);
-		String resolvedSix = resolvePassword(passSix);
+		catch(IOException e) {
+			//Handle exception 
+		}
 	}
 	
-	private static String resolvePassword(String password)
-	{
-		//Timer starts here
-		startTime = System.currentTimeMillis();
+	private static String encryptHashValue(String curLine) {
 		
+		String hashvalue = null;
 		
+		try {
+			MessageDigest j = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = j.digest(curLine.getBytes());
+			BigInteger k = new BigInteger(1,messageDigest);
+			hashvalue = k.toString(16);
+			
+			while(hashvalue.length()<32) {
+				hashvalue = "0" + hashvalue;
+			}
+		}
+		 
+		catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 		
-		//Timer ends here
-		finishTime = System.currentTimeMillis();
-		float elapsedSeconds = ((float)(finishTime - startTime)/1000.0f);
-		System.out.println("Program took "+elapsedSeconds+" seconds to recover this password.");
-		return null;
+		return hashvalue;
 	}
 }

@@ -12,26 +12,26 @@ public class DictionaryAttack {
 	public static void main(String[] args) {		
 		
 		double startTime;
-	    double finishTime;
-        double elapsedSeconds;
-        startTime = System.currentTimeMillis();
+	    	double finishTime;
+        	double elapsedSeconds;
+        	startTime = System.currentTimeMillis();
 		BufferedReader buffer = null;
 		List<String> hashvalue = new ArrayList<String>();
-	    String curLine = null;
+	 	String curLine = null;
 		
-		try{
+		try {
 			buffer = new BufferedReader(new FileReader("/input/hashvalue.txt"));
 			
 			while ((curLine = buffer.readLine()) != null) {
 				hashvalue.add(curLine);
 			}
 	   	
-			buffer = new BufferedReader(new FileReader("/input/"));		//need to add the dictionay filepath here
+			buffer = new BufferedReader(new FileReader("/input/"));		//need to add the dictionary filepath here
 		
 			while ((curLine = buffer.readLine()) != null) {
 				int i = hashvalue.indexOf(encryptHashValue(curLine));
 			
-				if(i != -1){
+				if(i != -1) {
 					finishTime = System.currentTimeMillis();
 					elapsedSeconds = (finishTime - startTime)/1000;
 					System.out.println();	

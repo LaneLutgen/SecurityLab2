@@ -76,8 +76,8 @@ public class DictionaryAttack {
 		String hashvalue = null;
 		
 		try {
-			MessageDigest j = MessageDigest.getInstance("MD5");
-			byte[] messageDigest = j.digest(curLine.getBytes());
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(curLine.getBytes());
 			BigInteger k = new BigInteger(1,messageDigest);
 			hashvalue = k.toString(16);
 			
